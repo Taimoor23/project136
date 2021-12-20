@@ -1,24 +1,23 @@
-from flask import Flask, jsonify, request
-from data import data
+import pandas as pd
+import csv
 
-app = Flask(__name__)
+df = pd.read_csv('FilteredStars.csv')
 
-@app.route("/")
+Name = df['Name']
+Mass = df['Mass']
+Distance = df['Distance']
+Radius = df['Radius']
+Gravity = df['Gravity']
 
-def index():
-    return jsonify({
-        "data": data,
-        "message": "success"
-    }), 200
+data = []
+for i,name in enumerate(Name):
+    star = {
+        'Name':Name[i],
+        'Mass':Mass[i],
+        'Radius':Radius[i],
+        'Distance':Distance[i],
+        'Gravity':Gravity[i]
+    }
+    data.append(star)
 
-@app.route("/planet")
-def planet():
-    name = request.args.get("name")
-    planet_data = next(item for item in data if item["name"] == name)
-    return jsonify({
-        "data": planet_data,
-        "message": "success"
-    }), 200
-
-if __name__ == "__main__":
-    app.run()
+print(data)
